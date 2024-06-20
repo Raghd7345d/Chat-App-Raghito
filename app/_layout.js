@@ -1,14 +1,30 @@
-import { Stack } from "expo-router";
+import { Slot, useRouter, useSegments } from "expo-router";
+import { View } from "react-native";
+import { AuthContextProvider, useAuth } from "../context/authContext";
+import { useEffect } from "react";
 
-export default function RootStack() {
+// Set up the auth context and render our layout inside of it.
+const MainLayout = () => {
+  const { isAuthenticated } = useAuth();
+  const segments = useSegments();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (typeof isAuthenticated == "undefined") return;
+    const inApp = segments[0] == "app";
+    if (isAuthenticated && !inApp) {
+      router.replace("home");
+    } else if (isAuthenticated == false) {
+      router.replace("signIn");
+    }
+  }, [isAuthenticated]);
+
+  return <Slot />;
+};
+export default function RootLayout() {
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen name="(tabs)" />
-      <Stack.Screen name="login" />
-    </Stack>
+    <AuthContextProvider>
+      <MainLayout />
+    </AuthContextProvider>
   );
 }
