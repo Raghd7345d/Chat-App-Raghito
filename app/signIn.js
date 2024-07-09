@@ -18,10 +18,11 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { useRouter } from "expo-router";
 import SignUp from "./signUp";
 import Loading from "../components/Loading";
+import { useAuth } from "../context/authContext";
 
 export default function SignIn() {
   const [loading, setloading] = useState(false);
-
+  const { login } = useAuth();
   const router = useRouter();
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -29,6 +30,12 @@ export default function SignIn() {
     if (!emailRef.current || !passwordRef.current) {
       Alert.alert("Sign in yalla");
       return;
+    }
+    setloading(true);
+    let response = await login(emailRef.current, passwordRef.current);
+    setloading(false);
+    if (!response.success) {
+      Alert.alert("Sign In", response.msg);
     }
   };
   return (
@@ -68,6 +75,7 @@ export default function SignIn() {
               className="flex-1 font-semibold text-neutral-500 "
               placeholder=" Email address"
               placeholderTextColor={"gray"}
+              style={{ fontSize: hp(2) }}
             />
           </View>
           <View

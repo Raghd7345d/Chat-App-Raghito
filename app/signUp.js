@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Pressable,
   Alert,
+  Platform,
 } from "react-native";
 import {
   widthPercentageToDP as wp,
@@ -19,46 +20,60 @@ import Loading from "../components/Loading";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { FontAwesome } from "@expo/vector-icons";
 import CustomKeyboardView from "../components/CustomKeyboardView";
+import { useAuth } from "../context/authContext";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+const ios = Platform.OS == "ios";
 
 export default function SignUp() {
-  const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [userName, setUserName] = useState("");
-  const [profileUrl, setProfileUrl] = useState("");
+  const { top } = useSafeAreaInsets();
 
+  const [loading, setloading] = useState(false);
+  const { register } = useAuth();
   const router = useRouter();
-
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const usernameRef = useRef();
+  const profileRef = useRef();
   const handleRegister = async () => {
-    if (!email || !password || !userName || !profileUrl) {
+    if (
+      !emailRef.current ||
+      !passwordRef.current ||
+      !usernameRef.current ||
+      !profileRef.current
+    ) {
       Alert.alert("All fields are required.");
       return;
     }
-    setLoading(true);
-    try {
-      Alert.alert("Registration successful");
-      router.push("home");
-    } catch (error) {
-      Alert.alert("Registration failed", error.message);
-    } finally {
-      setLoading(false);
+    setloading(true);
+
+    let response = await register(
+      emailRef.current,
+      passwordRef.current,
+      usernameRef.current,
+      profileRef.current
+    );
+    setloading(false);
+    if (!response.success) {
+      Alert.alert("Sign Up", response.msg);
     }
   };
-
   return (
-    <CustomKeyboardView>
+    <CustomKeyboardView inChat={true}>
       <StatusBar style="dark" />
+
       <View
-        style={{ paddingTop: hp(7), paddingHorizontal: wp(5) }}
+        style={{ paddingTop: hp(8), paddingHorizontal: wp(5) }}
         className="flex-1 gap-1"
       >
+        {/* Hier ist Image */}
         <View className="items-center ">
           <Image
-            style={{ height: hp(25) }}
+            style={{ height: hp(20) }}
             source={require("../assets/Sign-Up.png")}
             resizeMode="contain"
           />
         </View>
+        {/* Sign In */}
         <View className="gap-5">
           <Text
             style={{ fontSize: hp(4) }}
@@ -66,18 +81,20 @@ export default function SignUp() {
           >
             Sign Up
           </Text>
+
+          {/* Inputs */}
+
           <View
             style={{ height: hp(7) }}
             className="flex-row gap-2 px-4 bg-neutral-100 items-center justify-center rounded-xl"
           >
             <AntDesign name="user" size={hp(3)} color="gray" />
             <TextInput
-              onChangeText={setUserName}
-              style={{ fontSize: hp(2) }}
-              className="flex-1 font-semibold text-neutral-500"
-              placeholder="UserName"
+              onChangeText={(value) => (usernameRef.current = value)}
+              className="flex-1 font-semibold text-neutral-500 "
+              placeholder="Username"
               placeholderTextColor={"gray"}
-              value={userName}
+              style={{ fontSize: hp(2) }}
             />
           </View>
           <View
@@ -86,27 +103,26 @@ export default function SignUp() {
           >
             <Fontisto name="email" size={hp(3)} color="gray" />
             <TextInput
-              onChangeText={setEmail}
-              style={{ fontSize: hp(2) }}
-              className="flex-1 font-semibold text-neutral-500"
-              placeholder="Email address"
+              onChangeText={(value) => (emailRef.current = value)}
+              className="flex-1 font-semibold text-neutral-500 "
+              placeholder=" Email address"
               placeholderTextColor={"gray"}
-              value={email}
+              style={{ fontSize: hp(2) }}
             />
           </View>
+
           <View
             style={{ height: hp(7) }}
             className="flex-row gap-2 px-4 bg-neutral-100 items-center justify-center rounded-xl"
           >
             <AntDesign name="lock" size={hp(3)} color="gray" />
             <TextInput
-              onChangeText={setPassword}
+              onChangeText={(value) => (passwordRef.current = value)}
               secureTextEntry
               style={{ fontSize: hp(2) }}
-              className="flex-1 font-semibold text-neutral-500"
+              className="flex-1 font-semibold text-neutral-500 "
               placeholder="Password"
               placeholderTextColor={"gray"}
-              value={password}
             />
           </View>
           <View
@@ -115,15 +131,15 @@ export default function SignUp() {
           >
             <FontAwesome name="photo" size={hp(3)} color="gray" />
             <TextInput
-              onChangeText={setProfileUrl}
-              style={{ fontSize: hp(2) }}
-              className="flex-1 font-semibold text-neutral-500"
-              placeholder="Profile Url"
+              onChangeText={(value) => (profileRef.current = value)}
+              className="flex-1 font-semibold text-neutral-500 "
+              placeholder="Profile url"
               placeholderTextColor={"gray"}
-              value={profileUrl}
+              style={{ fontSize: hp(2) }}
             />
           </View>
         </View>
+        {/* Submit button */}
         <View>
           {loading ? (
             <View className="flex-row justify-center">
