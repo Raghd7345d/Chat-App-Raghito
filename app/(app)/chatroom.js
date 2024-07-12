@@ -27,19 +27,6 @@ import {
 import MessageList from "../../components/MessageList";
 
 export default function ChatRoom() {
-  const getRandomEmoji = () => {
-    const emojis = ["😄", "😆", "😂", "🤣", "😊", "😋", "😎"];
-    const randomIndex = Math.floor(Math.random() * emojis.length);
-    return emojis[randomIndex];
-  };
-  const [selectedText, setSelectedText] = useState("");
-  const handleMouseUp = () => {
-    const selection = window.getSelection().toString();
-    if (selection) {
-      setSelectedText(selection);
-    }
-  };
-
   const item = useLocalSearchParams(); // Second User
   const { user } = useAuth(); // Raghito
   const router = useRouter();

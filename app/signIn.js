@@ -67,7 +67,7 @@ export default function SignIn() {
 
           <View
             style={{ height: hp(7) }}
-            className="flex-row gap-2 px-4 bg-neutral-100 items-center justify-center rounded-xl"
+            className="flex-row gap-2 px-4 bg-neutral-100 items-center justify-center rounded-xl "
           >
             <Fontisto name="email" size={hp(3)} color="gray" />
             <TextInput
@@ -106,18 +106,20 @@ export default function SignIn() {
               <Loading size={hp(16)} />
             </View>
           ) : (
-            <TouchableOpacity
-              onPress={handloLogin}
-              style={{ height: hp(6.7) }}
-              className="bg-orange-600 rounded-xl justify-center items-center"
-            >
-              <Text
-                style={{ fontSize: hp(2.7) }}
-                className="font-semibold text-white tracking-wider"
+            <View className="pt-4">
+              <TouchableOpacity
+                onPress={handloLogin}
+                style={{ height: hp(6.7) }}
+                className="bg-orange-600 rounded-xl justify-center items-center"
               >
-                Sign In
-              </Text>
-            </TouchableOpacity>
+                <Text
+                  style={{ fontSize: hp(2.7) }}
+                  className="font-semibold text-white tracking-wider"
+                >
+                  Sign In
+                </Text>
+              </TouchableOpacity>
+            </View>
           )}
         </View>
         <View className="flex-row justify-center">

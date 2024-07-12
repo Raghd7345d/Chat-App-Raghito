@@ -58,9 +58,9 @@ export default function SignUp() {
     }
   };
   return (
-    <CustomKeyboardView inChat={true}>
+    <View className="flex-1">
+      {/* // <CustomKeyboardView inChat={true}> */}
       <StatusBar style="dark" />
-
       <View
         style={{ paddingTop: hp(8), paddingHorizontal: wp(5) }}
         className="flex-1 gap-1"
@@ -146,18 +146,20 @@ export default function SignUp() {
               <Loading size={hp(16)} />
             </View>
           ) : (
-            <TouchableOpacity
-              onPress={handleRegister}
-              style={{ height: hp(6.7) }}
-              className="bg-orange-600 rounded-xl justify-center items-center"
-            >
-              <Text
-                style={{ fontSize: hp(2.7) }}
-                className="font-semibold text-white tracking-wider"
+            <View className="pt-3">
+              <TouchableOpacity
+                onPress={handleRegister}
+                style={{ height: hp(6.7) }}
+                className="bg-orange-600 rounded-xl justify-center items-center"
               >
-                Sign Up
-              </Text>
-            </TouchableOpacity>
+                <Text
+                  style={{ fontSize: hp(2.7) }}
+                  className="font-semibold text-white tracking-wider"
+                >
+                  Sign Up
+                </Text>
+              </TouchableOpacity>
+            </View>
           )}
         </View>
         <View className="flex-row justify-center">
@@ -177,6 +179,7 @@ export default function SignUp() {
           </Pressable>
         </View>
       </View>
-    </CustomKeyboardView>
+      {/* </CustomKeyboardView> */}
+    </View>
   );
 }
